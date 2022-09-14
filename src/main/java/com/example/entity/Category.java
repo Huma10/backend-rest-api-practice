@@ -16,23 +16,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user")
+@Table(name = "category")
 @Setter
 @Getter
-public class User {
+public class Category {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private String name;
+	private String categoryTitle;
 	
-	private String email;
+	private String categoryDescription;
 	
-	private String password;
-	
-	private String about;
-	
-	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Post> posts = new ArrayList<>();
+	
 }
