@@ -3,6 +3,7 @@ package com.example.service;
 import java.util.List;
 
 import com.example.payloads.PostDTO;
+import com.example.payloads.PostResponse;
 
 public interface PostService {
 
@@ -10,7 +11,7 @@ public interface PostService {
 	
 	PostDTO update(PostDTO postDTO,long id);
 	
-	List<PostDTO> findAllPosts();
+	PostResponse findAllPosts(Integer pageNumber,Integer pageSize, String sortBy, String sortDir);
 	
 	PostDTO findById(long id);
 	
