@@ -9,4 +9,8 @@ public class Constants {
 	public static final String SORT_BY = "id";
 	
 	public static final String SORT_DIR = "asc";
+	
+	public static final Long NORMAL_USER = 502L;
+	
+	public static final Long ADMIN_USER = 501L;
 }

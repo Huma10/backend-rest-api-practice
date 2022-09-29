@@ -1,6 +1,7 @@
 package com.example.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.example.exception.*;
@@ -8,10 +9,14 @@ import com.example.exception.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.config.Constants;
+import com.example.entity.Roles;
 import com.example.entity.User;
 import com.example.payloads.UserDTO;
+import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,9 +25,30 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private RoleRepository roleRepository;
 	
 	@Override
 	public UserDTO register(UserDTO userDTO) {
+		// change dto to entity
+		User user = modelMapper.map(userDTO, User.class);
+		// first make sure about password and roles
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		
+		// next about roles
+		 Roles role = roleRepository.findById(Constants.NORMAL_USER).get();
+		 
+		 user.getRoles().add(role);
+		
+		 User saveUser = userRepository.save(user);
+		return modelMapper.map(saveUser, UserDTO.class);
+	}
+	
+	
+	@Override
+	public UserDTO createNewuser(UserDTO userDTO) {
 		// covert dto to user
 		User user = dtoToUser(userDTO);
 		// call save() method: save data in user entity only
@@ -92,6 +118,7 @@ public class UserServiceImpl implements UserService {
 //		userDTO.setAbout(user.getAbout());
 		return userDTO;
 	}
+
 	
 	
 

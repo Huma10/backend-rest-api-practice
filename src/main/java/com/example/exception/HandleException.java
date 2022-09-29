@@ -37,4 +37,12 @@ public class HandleException {
 	}
 	
 	
+	@ExceptionHandler(APIException.class)
+	public ResponseEntity<APIResponse> usernamePasswordFoundException(APIException ex){
+		String msg = ex.getMessage();
+		APIResponse apiResponse = new APIResponse(msg,false);
+		return new ResponseEntity<APIResponse>(apiResponse,HttpStatus.BAD_REQUEST);
+	}
+	
+	
 }

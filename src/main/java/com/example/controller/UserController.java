@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public class UserController {
 	// add user
 	@PostMapping("/")
 	public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
-		UserDTO userDTO2 = userService.register(userDTO);
+		UserDTO userDTO2 = userService.createNewuser(userDTO);
 		return new ResponseEntity<UserDTO>(userDTO2, HttpStatus.OK);
 	}
 
@@ -53,7 +54,8 @@ public class UserController {
 	public ResponseEntity<UserDTO> getAllUsers(@PathVariable("userid") Long id) {
 		return ResponseEntity.ok(userService.findUserById(id));
 	}
-
+	// ADMIN SHOULD BE ABLE TO DELETE ONLY
+	@PreAuthorize("hasRole('ADMIN')")
 	// delete user
 	@DeleteMapping("/{userid}")
 	public ResponseEntity<APIResponse> deleteUser(@PathVariable("userid") Long id) {
